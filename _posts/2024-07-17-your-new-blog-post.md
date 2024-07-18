@@ -1,27 +1,19 @@
 ## This is my first blog post
 
 ```python
-def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
-    def lca(root, p, q):
-        if not root or root.val == p or root.val == q:
-            return root
-        left = lca(root.left, p, q) 
-        right = lca(root.right, p, q)
-        if left and right:
-            return root
-        return left if left else right
+def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+    nodes = defaultdict(TreeNode)
+    parents = set()
+    children = set()
+    for p, c, isLeft in descriptions:
+        nodes[p].val = p
+        nodes[c].val = c
+        if isLeft == 1:
+            nodes[p].left = nodes[c]
+        else:
+            nodes[p].right = nodes[c]
+        parents.add(nodes[p])
+        children.add(nodes[c])
 
-    def path(node, t, dir=''):
-        if not node: return
-        if node.val == t: return dir
-        a = path(node.left, t, 'L')
-        if a: 
-            return a + dir
-        a = path(node.right, t, 'R')
-        if a: return a + dir
-
-    lca = lca(root, startValue, destValue)
-    a, b = path(lca, startValue), path(lca, destValue)
-
-    return 'U'*len(a) + b[::-1]
+    return (parents - children).pop()
 ```
